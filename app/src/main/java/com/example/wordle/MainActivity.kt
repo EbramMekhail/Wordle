@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -42,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         var winStreakNumber = 0
 
         var wordToGuess = FourLetterWordList.getRandomFourLetterWord()
-        Log.v("Wordle",wordToGuess)
+//        Log.v("Wordle",wordToGuess)
         wordle.text = wordToGuess
 
 
@@ -111,7 +110,7 @@ class MainActivity : AppCompatActivity() {
                 guessInput.isClickable = true
 
                 wordToGuess = FourLetterWordList.getRandomFourLetterWord()
-                Log.v("Wordle",wordToGuess)
+//                Log.v("Wordle",wordToGuess)
                 wordle.text = wordToGuess
 
                 answerOne.text = ""
@@ -138,7 +137,7 @@ class MainActivity : AppCompatActivity() {
             if (guess[i] == wordToGuess[i]) {
                 result.setSpan(ForegroundColorSpan(Color.GREEN),i,i+1,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             } else if (guess[i] in wordToGuess) {
-                result.setSpan(ForegroundColorSpan(Color.GRAY),i,i+1,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                result.setSpan(ForegroundColorSpan(Color.BLUE),i,i+1,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             } else {
                 result.setSpan(ForegroundColorSpan(Color.RED),i,i+1,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
