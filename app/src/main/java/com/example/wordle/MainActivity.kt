@@ -1,26 +1,28 @@
 package com.example.wordle
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import android.text.style.ForegroundColorSpan
-import android.util.Log
-
-
+import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity() {
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
         var guess = 0
         val guessInput = findViewById<EditText>(R.id.guessInput)
         val guessButton = findViewById<Button>(R.id.guessButton)
@@ -36,13 +38,17 @@ class MainActivity : AppCompatActivity() {
 
         val wordle = findViewById<TextView>(R.id.wordle)
 
-        val wordToGuess = FourLetterWordList.getRandomFourLetterWord()
+        val winStreak = findViewById<TextView>(R.id.winStreak)
+        var winStreakNumber = 0
+
+        var wordToGuess = FourLetterWordList.getRandomFourLetterWord()
         Log.v("Wordle",wordToGuess)
         wordle.text = wordToGuess
 
 
         guessButton.setOnClickListener {
-            var text = guessInput.text.toString()
+
+            var text = guessInput.text.toString().uppercase()
             if (text.length !=4){
                 this.currentFocus?.let { it1 -> hideKeyboard(it1) }
                 Toast
@@ -51,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                 guessInput.text.clear()
                 return@setOnClickListener
             }
+
             when (guess) {
                 0 -> {
                     answerOne.text = text
@@ -84,13 +91,37 @@ class MainActivity : AppCompatActivity() {
                         "Nice Job! You Won, Press reset to play again.",
                         Toast.LENGTH_LONG
                     ).show()
+                    winStreakNumber++
+                    winStreak.text = "Win-streak: $winStreakNumber"
                 } else {
                     Toast.makeText(
                         this,
                         "Better Luck Next time, Press reset to play again.",
                         Toast.LENGTH_LONG
                     ).show()
+                    winStreak.text =  "Win-streak: 0"
+                    winStreakNumber = 0
                 }
+            }
+            resetButton.setOnClickListener {
+                resetButton.visibility = View.INVISIBLE
+                guessButton.visibility = View.VISIBLE
+                wordle.visibility = View.INVISIBLE
+                guessInput.isEnabled = true
+                guessInput.isClickable = true
+
+                wordToGuess = FourLetterWordList.getRandomFourLetterWord()
+                Log.v("Wordle",wordToGuess)
+                wordle.text = wordToGuess
+
+                answerOne.text = ""
+                answerTwo.text = ""
+                answerThree.text = ""
+
+                answerOneCheck.text = ""
+                answerTwoCheck.text = ""
+                answerThreeCheck.text = ""
+                guess = 0
             }
         }
 
